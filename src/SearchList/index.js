@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ReactComponent as GearIcon } from 'bootstrap-icons/icons/gear-fill.svg';
+import style from './SearchList.module.css';
 
 
 class SearchList extends React.Component {
@@ -56,15 +58,20 @@ class SearchList extends React.Component {
     }
 
     _renderTracks() {
-        const { tracks, trackComponent: TrackComponent } = this.props;
+        const { tracks, trackComponent: TrackComponent, inQueueTracks, onQueueTrackButtonClick } = this.props;
         if (!TrackComponent || !tracks || tracks.length === 0) {
             return null;
         }
 
         return (
             <React.Fragment>
-                <li>Tracks</li>
-                {tracks.map(track => <li><TrackComponent track={track} /></li>)}
+                <li className={`${style.trackRowContainer} ${style.headerRowContainer}`}>
+                    <div className={style.trackRowHeader}>Title</div>
+                    <div className={style.trackRowHeader}>Artist</div>
+                    <div className={style.trackRowHeader}>Album</div>
+                    <div className={style.trackRowHeader}><GearIcon /></div>
+                </li>
+                {tracks.map(track => <li className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}><TrackComponent track={track} inQueue={inQueueTracks.includes(track.uri)} onQueueTrackButtonClick={onQueueTrackButtonClick} /></li>)}
             </React.Fragment>
         );
     }
@@ -91,6 +98,12 @@ SearchList.propTypes = {
     artistComponent: PropTypes.elementType,
     playlistComponent: PropTypes.elementType,
     trackComponent: PropTypes.elementType,
+    inQueueTracks: PropTypes.array,
+    onQueueTrackButtonClick: PropTypes.func,
+};
+
+SearchList.defaultProps = {
+    inQueueTracks: []
 };
 
 export default SearchList;

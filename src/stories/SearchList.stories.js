@@ -1,6 +1,8 @@
 import React from 'react';
+import { action } from '@storybook/addon-actions';
 import SearchList from '../SearchList';
 import sampleData from './search.sample.json';
+import TrackListItem from '../TrackListItem';
 
 
 export default {
@@ -8,6 +10,13 @@ export default {
 };
 
 export const empty = () => <SearchList />;
+
+export const basic = () => <SearchList
+    {...sampleData}
+    trackComponent={TrackListItem}
+    inQueueTracks={["spotify:track:5DXt0rgXsJPkU6sBCh4L4J", "spotify:track:4aebBr4JAihzJQR0CiIZJv"]}
+    onQueueTrackButtonClick={action('onQueueTrackButtonClick')}
+/>;
 
 export const withSimpleDisplay = () => {
     const SimpleDisplay = props => {
@@ -20,5 +29,6 @@ export const withSimpleDisplay = () => {
         artistComponent={SimpleDisplay}
         playlistComponent={SimpleDisplay}
         trackComponent={SimpleDisplay}
+        inQueueTracks={["spotify:track:5DXt0rgXsJPkU6sBCh4L4J", "spotify:track:4aebBr4JAihzJQR0CiIZJv"]}
     />;
 };

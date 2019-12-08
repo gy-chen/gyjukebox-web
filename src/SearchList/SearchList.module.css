@@ -1,0 +1,25 @@
+.headerRowContainer {
+    position: sticky;
+    top: 0;
+    opacity: .8;
+    background: rgba(255, 255, 255, .6);
+    padding: 8px;
+}
+
+.rowContainer:nth-child(even) {
+    background-color: rgba(0, 0, 0, .05);
+}
+
+.trackRowContainer {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+
+
+.trackRowHeader {
+    text-transform: uppercase;    
+}
+
+.removeDefaultListItemStyle {
+    list-style: none;
+}
