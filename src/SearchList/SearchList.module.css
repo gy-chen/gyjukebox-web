@@ -10,14 +10,18 @@
     background-color: rgba(0, 0, 0, .05);
 }
 
+.rowHeader {
+    text-transform: uppercase;    
+}
+
+.albumRowContainer {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
 .trackRowContainer {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-}
-
-
-.trackRowHeader {
-    text-transform: uppercase;    
 }
 
 .removeDefaultListItemStyle {

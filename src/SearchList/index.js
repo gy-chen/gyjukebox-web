@@ -16,15 +16,19 @@ class SearchList extends React.Component {
     }
 
     _renderAlbums() {
-        const { albums, albumComponent: AlbumComponent } = this.props;
+        const { albums, albumComponent: AlbumComponent, onViewAlbumButtonClick } = this.props;
         if (!AlbumComponent || !albums || albums.length === 0) {
             return null;
         }
 
         return (
             <React.Fragment>
-                <li>Albums</li>
-                {albums.map(album => <li><AlbumComponent album={album} /></li>)}
+                <li className={`${style.albumRowContainer} ${style.headerRowContainer}`}>
+                    <div className={style.rowHeader}>Album</div>
+                    <div className={style.rowHeader}>Artist</div>
+                    <div className={style.rowHeader}><GearIcon /></div>
+                </li>
+                {albums.map(album => <li className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}><AlbumComponent album={album} onViewAlbumButtonClick={onViewAlbumButtonClick} /></li>)}
             </React.Fragment>
         )
     };
@@ -66,10 +70,10 @@ class SearchList extends React.Component {
         return (
             <React.Fragment>
                 <li className={`${style.trackRowContainer} ${style.headerRowContainer}`}>
-                    <div className={style.trackRowHeader}>Title</div>
-                    <div className={style.trackRowHeader}>Artist</div>
-                    <div className={style.trackRowHeader}>Album</div>
-                    <div className={style.trackRowHeader}><GearIcon /></div>
+                    <div className={style.rowHeader}>Title</div>
+                    <div className={style.rowHeader}>Artist</div>
+                    <div className={style.rowHeader}>Album</div>
+                    <div className={style.rowHeader}><GearIcon /></div>
                 </li>
                 {tracks.map(track => <li className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}><TrackComponent track={track} inQueue={inQueueTracks.includes(track.uri)} onQueueTrackButtonClick={onQueueTrackButtonClick} /></li>)}
             </React.Fragment>
@@ -79,12 +83,20 @@ class SearchList extends React.Component {
     render() {
 
         return (
-            <ul>
-                {this._renderAlbums()}
-                {this._renderArtists()}
-                {this._renderPlaylists()}
-                {this._renderTracks()}
-            </ul>
+            <React.Fragment>
+                <ul>
+                    {this._renderAlbums()}
+                </ul>
+                <ul>
+                    {this._renderArtists()}
+                </ul>
+                <ul>
+                    {this._renderPlaylists()}
+                </ul>
+                <ul>
+                    {this._renderTracks()}
+                </ul>
+            </React.Fragment>
         );
     }
 }
@@ -100,6 +112,7 @@ SearchList.propTypes = {
     trackComponent: PropTypes.elementType,
     inQueueTracks: PropTypes.array,
     onQueueTrackButtonClick: PropTypes.func,
+    onViewAlbumButtonClick: PropTypes.func,
 };
 
 SearchList.defaultProps = {
