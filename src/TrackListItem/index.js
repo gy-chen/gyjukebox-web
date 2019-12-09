@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { ReactComponent as PlusIcon } from "bootstrap-icons/icons/plus.svg";
 import { ReactComponent as CheckIcon } from "bootstrap-icons/icons/check.svg";
+import AlbumColumnItem from "../AlbumColumItem";
 import style from "./TrackListItem.module.css";
 
 const TrackListItem = props => {
@@ -11,6 +12,12 @@ const TrackListItem = props => {
     const { onQueueTrackButtonClick } = props;
 
     onQueueTrackButtonClick && onQueueTrackButtonClick(track);
+  };
+
+  const _onViewAlbumButtonClick = () => {
+    const { onViewAlbumButtonClick } = props;
+
+    onViewAlbumButtonClick && onViewAlbumButtonClick(track.album);
   };
 
   const _renderQueueButton = () => {
@@ -30,7 +37,12 @@ const TrackListItem = props => {
     <div className={style.container}>
       <div>{track.name}</div>
       <div>{track.artists.map(artist => artist.name).join(", ")}</div>
-      <div>{track.album.name}</div>
+      <div>
+        <AlbumColumnItem
+          album={track.album}
+          onViewAlbumButtonClick={_onViewAlbumButtonClick}
+        />
+      </div>
       <div>{_renderQueueButton()}</div>
     </div>
   );
@@ -39,7 +51,8 @@ const TrackListItem = props => {
 TrackListItem.propTypes = {
   track: PropTypes.object.isRequired,
   inQueue: PropTypes.bool,
-  onQueueTrackButtonClick: PropTypes.func
+  onQueueTrackButtonClick: PropTypes.func,
+  onViewAlbumButtonClick: PropTypes.func
 };
 
 export default TrackListItem;

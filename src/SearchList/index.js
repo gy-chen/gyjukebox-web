@@ -86,7 +86,8 @@ class SearchList extends React.Component {
       tracks,
       trackComponent: TrackComponent,
       inQueueTracks,
-      onQueueTrackButtonClick
+      onQueueTrackButtonClick,
+      onViewAlbumButtonClick
     } = this.props;
     if (!TrackComponent || !tracks || tracks.length === 0) {
       return null;
@@ -112,6 +113,7 @@ class SearchList extends React.Component {
               track={track}
               inQueue={inQueueTracks.includes(track.uri)}
               onQueueTrackButtonClick={onQueueTrackButtonClick}
+              onViewAlbumButtonClick={onViewAlbumButtonClick}
             />
           </li>
         ))}
