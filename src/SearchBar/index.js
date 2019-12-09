@@ -6,7 +6,7 @@ import style from "./SearchBar.module.css";
 const SearchBar = props => {
   const { onSearchButtonClick } = props;
 
-  const [q, setQ] = React.useState();
+  const [q, setQ] = React.useState("");
 
   const _onSearchButtonClick = e => {
     e.preventDefault();
