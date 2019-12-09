@@ -4,7 +4,6 @@
 }
 
 .searchInput {
-  flex-grow: 1;
   border-style: solid none solid solid;
   border-width: 1px 0 1px 1px;
   border-radius: 0.5em 0 0 0.5em;
