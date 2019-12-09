@@ -2,6 +2,10 @@
   font-weight: bold;
   position: relative;
   cursor: pointer;
+  border-bottom-style: solid;
+  padding-bottom: 2px;
+  border-bottom-width: 1px;
+  line-height: 1.4em;
 }
 
 .item:hover {
@@ -10,14 +14,4 @@
 
 .item:active {
   opacity: 0.4;
-}
-
-.item:after {
-  content: "";
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -4px;
 }
