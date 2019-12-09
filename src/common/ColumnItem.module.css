@@ -1,0 +1,23 @@
+.item {
+  font-weight: bold;
+  position: relative;
+  cursor: pointer;
+}
+
+.item:hover {
+  opacity: 0.6;
+}
+
+.item:active {
+  opacity: 0.4;
+}
+
+.item:after {
+  content: "";
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+}

@@ -1,27 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
+import AlbumColumnItem from "../AlbumColumItem";
 import style from "./AlbumListItem.module.css";
-import { ReactComponent as SearchIcon } from "bootstrap-icons/icons/search.svg";
 
 const AlbumListItem = props => {
-  const { album } = props;
-
-  const _onViewAlbumButtonClick = () => {
-    const { onViewAlbumButtonClick } = props;
-
-    onViewAlbumButtonClick && onViewAlbumButtonClick(album);
-  };
+  const { album, onViewAlbumButtonClick } = props;
 
   return (
     <div className={style.container}>
-      <div>{album.name}</div>
-      <div>{album.artists.map(artist => artist.name).join(", ")}</div>
       <div>
-        <SearchIcon
-          onClick={_onViewAlbumButtonClick}
-          className={style.searchIcon}
+        <AlbumColumnItem
+          album={album}
+          onViewAlbumButtonClick={onViewAlbumButtonClick}
         />
       </div>
+      <div>{album.artists.map(artist => artist.name).join(", ")}</div>
     </div>
   );
 };

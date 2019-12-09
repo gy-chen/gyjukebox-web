@@ -30,9 +30,6 @@ class SearchList extends React.Component {
         >
           <div className={style.rowHeader}>Album</div>
           <div className={style.rowHeader}>Artist</div>
-          <div className={style.rowHeader}>
-            <GearIcon />
-          </div>
         </li>
         {albums.map(album => (
           <li

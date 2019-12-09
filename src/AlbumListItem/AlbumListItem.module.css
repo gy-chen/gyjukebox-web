@@ -1,18 +1,18 @@
 .container {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    padding: 8px;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  padding: 8px;
+  align-items: center;
 }
 
 .searchIcon {
-    vertical-align: bottom;
-    cursor: pointer;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 50%;
-    width: 1.6em;
-    height: 1.6em;
-    padding: 4px;
-    box-sizing: border-box;
+  vertical-align: bottom;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50%;
+  width: 1.6em;
+  height: 1.6em;
+  padding: 4px;
+  box-sizing: border-box;
 }
