@@ -48,17 +48,30 @@ class SearchList extends React.Component {
   }
 
   _renderArtists() {
-    const { artists, artistComponent: ArtistComponent } = this.props;
+    const {
+      artists,
+      artistComponent: ArtistComponent,
+      onViewArtistButtonClick
+    } = this.props;
     if (!ArtistComponent || !artists || artists.length === 0) {
       return null;
     }
 
     return (
       <React.Fragment>
-        <li>Artists</li>
+        <li
+          className={`${style.headerRowContainer} ${style.artistRowContainer}`}
+        >
+          <div className={style.rowHeader}>Artist</div>
+        </li>
         {artists.map(artist => (
-          <li>
-            <ArtistComponent artist={artist} />
+          <li
+            className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}
+          >
+            <ArtistComponent
+              artist={artist}
+              onViewArtistButtonClick={onViewArtistButtonClick}
+            />
           </li>
         ))}
       </React.Fragment>

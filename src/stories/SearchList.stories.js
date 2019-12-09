@@ -4,6 +4,7 @@ import SearchList from "../SearchList";
 import sampleData from "./search.sample.json";
 import TrackListItem from "../TrackListItem";
 import AlbumListItem from "../AlbumListItem";
+import ArtistListItem from "../ArtistListItem";
 
 export default {
   title: "SearchList"
@@ -15,6 +16,7 @@ export const basic = () => (
   <SearchList
     {...sampleData}
     albumComponent={AlbumListItem}
+    artistComponent={ArtistListItem}
     trackComponent={TrackListItem}
     inQueueTracks={[
       "spotify:track:5DXt0rgXsJPkU6sBCh4L4J",
