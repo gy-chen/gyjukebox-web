@@ -60,12 +60,14 @@ class SearchList extends React.Component {
     return (
       <React.Fragment>
         <li
+          key="artistsHeaderRow"
           className={`${style.headerRowContainer} ${style.artistRowContainer}`}
         >
           <div className={style.rowHeader}>Artist</div>
         </li>
         {artists.map(artist => (
           <li
+            key={artist.uri}
             className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}
           >
             <ArtistComponent
@@ -91,6 +93,7 @@ class SearchList extends React.Component {
     return (
       <React.Fragment>
         <li
+          key="playlistsHeaderRow"
           className={`${style.headerRowContainer} ${style.playlistRowContainer}`}
         >
           <div className={style.rowHeader}>Playlist</div>
@@ -98,6 +101,7 @@ class SearchList extends React.Component {
         </li>
         {playlists.map(playlist => (
           <li
+            key={playlist.uri}
             className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}
           >
             <PlaylistComponent
@@ -126,6 +130,7 @@ class SearchList extends React.Component {
     return (
       <React.Fragment>
         <li
+          key="tracksHeaderRow"
           className={`${style.trackRowContainer} ${style.headerRowContainer}`}
         >
           <div className={style.rowHeader}>Track</div>
@@ -137,6 +142,7 @@ class SearchList extends React.Component {
         </li>
         {tracks.map(track => (
           <li
+            key={track.uri}
             className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}
           >
             <TrackComponent
