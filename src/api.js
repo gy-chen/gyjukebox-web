@@ -24,6 +24,7 @@ export const getCurrentTrack = async () => {
 export const getAlbumTracks = async (album, offset = 0) => {
   const params = { offset };
   const rv = await instance.get(`/album/${album.id}/tracks`, { params });
+  rv.data.tracks.forEach(track => (track.album = album));
   return rv.data;
 };
 
@@ -36,5 +37,6 @@ export const getArtistDetails = async (artist, offset = 0) => {
 export const getPlaylistTracks = async (playlist, offset = 0) => {
   const params = { offset };
   const rv = await instance.get(`/playlist/${playlist.id}/tracks`, { params });
+  rv.data.tracks = rv.data.tracks.map(playlistTrack => playlistTrack.track);
   return rv.data;
 };
