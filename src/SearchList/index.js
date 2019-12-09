@@ -17,7 +17,8 @@ class SearchList extends React.Component {
     const {
       albums,
       albumComponent: AlbumComponent,
-      onViewAlbumButtonClick
+      onViewAlbumButtonClick,
+      onViewArtistButtonClick
     } = this.props;
     if (!AlbumComponent || !albums || albums.length === 0) {
       return null;
@@ -38,6 +39,7 @@ class SearchList extends React.Component {
             <AlbumComponent
               album={album}
               onViewAlbumButtonClick={onViewAlbumButtonClick}
+              onViewArtistButtonClick={onViewArtistButtonClick}
             />
           </li>
         ))}
@@ -87,7 +89,8 @@ class SearchList extends React.Component {
       trackComponent: TrackComponent,
       inQueueTracks,
       onQueueTrackButtonClick,
-      onViewAlbumButtonClick
+      onViewAlbumButtonClick,
+      onViewArtistButtonClick
     } = this.props;
     if (!TrackComponent || !tracks || tracks.length === 0) {
       return null;
@@ -114,6 +117,7 @@ class SearchList extends React.Component {
               inQueue={inQueueTracks.includes(track.uri)}
               onQueueTrackButtonClick={onQueueTrackButtonClick}
               onViewAlbumButtonClick={onViewAlbumButtonClick}
+              onViewArtistButtonClick={onViewArtistButtonClick}
             />
           </li>
         ))}
@@ -144,7 +148,8 @@ SearchList.propTypes = {
   trackComponent: PropTypes.elementType,
   inQueueTracks: PropTypes.array,
   onQueueTrackButtonClick: PropTypes.func,
-  onViewAlbumButtonClick: PropTypes.func
+  onViewAlbumButtonClick: PropTypes.func,
+  onViewArtistButtonClick: PropTypes.func
 };
 
 SearchList.defaultProps = {

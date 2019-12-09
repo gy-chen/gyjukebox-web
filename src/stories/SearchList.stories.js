@@ -22,6 +22,7 @@ export const basic = () => (
     ]}
     onQueueTrackButtonClick={action("onQueueTrackButtonClick")}
     onViewAlbumButtonClick={action("onViewAlbumButtonClick")}
+    onViewArtistButtonClick={action("onViewArtistButtonClick")}
   />
 );
 
