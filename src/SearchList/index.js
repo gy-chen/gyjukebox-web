@@ -155,10 +155,14 @@ class SearchList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <ul>{this._renderAlbums()}</ul>
-        <ul>{this._renderArtists()}</ul>
-        <ul>{this._renderPlaylists()}</ul>
-        <ul>{this._renderTracks()}</ul>
+        <ul className={style.removeDefaultListStyle}>{this._renderAlbums()}</ul>
+        <ul className={style.removeDefaultListStyle}>
+          {this._renderArtists()}
+        </ul>
+        <ul className={style.removeDefaultListStyle}>
+          {this._renderPlaylists()}
+        </ul>
+        <ul className={style.removeDefaultListStyle}>{this._renderTracks()}</ul>
       </React.Fragment>
     );
   }
