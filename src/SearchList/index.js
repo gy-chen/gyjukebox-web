@@ -79,17 +79,31 @@ class SearchList extends React.Component {
   }
 
   _renderPlaylists() {
-    const { playlists, playlistComponent: PlaylistComponent } = this.props;
+    const {
+      playlists,
+      playlistComponent: PlaylistComponent,
+      onViewPlaylistButtonClick
+    } = this.props;
     if (!PlaylistComponent || !playlists || playlists.length === 0) {
       return null;
     }
 
     return (
       <React.Fragment>
-        <li>Playlist</li>
+        <li
+          className={`${style.headerRowContainer} ${style.playlistRowContainer}`}
+        >
+          <div className={style.rowHeader}>Playlist</div>
+          <div className={style.rowHeader}>Owner</div>
+        </li>
         {playlists.map(playlist => (
-          <li>
-            <PlaylistComponent playlist={playlist} />
+          <li
+            className={`${style.removeDefaultListItemStyle} ${style.rowContainer}`}
+          >
+            <PlaylistComponent
+              playlist={playlist}
+              onViewPlaylistButtonClick={onViewPlaylistButtonClick}
+            />
           </li>
         ))}
       </React.Fragment>
@@ -162,7 +176,8 @@ SearchList.propTypes = {
   inQueueTracks: PropTypes.array,
   onQueueTrackButtonClick: PropTypes.func,
   onViewAlbumButtonClick: PropTypes.func,
-  onViewArtistButtonClick: PropTypes.func
+  onViewArtistButtonClick: PropTypes.func,
+  onViewPlaylistButtonClick: PropTypes.func
 };
 
 SearchList.defaultProps = {

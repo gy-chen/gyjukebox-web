@@ -5,6 +5,7 @@ import sampleData from "./search.sample.json";
 import TrackListItem from "../TrackListItem";
 import AlbumListItem from "../AlbumListItem";
 import ArtistListItem from "../ArtistListItem";
+import PlaylistListItem from "../PlaylistListItem";
 
 export default {
   title: "SearchList"
@@ -18,6 +19,7 @@ export const basic = () => (
     albumComponent={AlbumListItem}
     artistComponent={ArtistListItem}
     trackComponent={TrackListItem}
+    playlistComponent={PlaylistListItem}
     inQueueTracks={[
       "spotify:track:5DXt0rgXsJPkU6sBCh4L4J",
       "spotify:track:4aebBr4JAihzJQR0CiIZJv"
@@ -25,6 +27,7 @@ export const basic = () => (
     onQueueTrackButtonClick={action("onQueueTrackButtonClick")}
     onViewAlbumButtonClick={action("onViewAlbumButtonClick")}
     onViewArtistButtonClick={action("onViewArtistButtonClick")}
+    onViewPlaylistButtonClick={action("onViewPlaylistButtonClick")}
   />
 );
 
