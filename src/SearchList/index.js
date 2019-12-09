@@ -98,7 +98,7 @@ class SearchList extends React.Component {
         <li
           className={`${style.trackRowContainer} ${style.headerRowContainer}`}
         >
-          <div className={style.rowHeader}>Title</div>
+          <div className={style.rowHeader}>Track</div>
           <div className={style.rowHeader}>Artist</div>
           <div className={style.rowHeader}>Album</div>
           <div className={style.rowHeader}>
