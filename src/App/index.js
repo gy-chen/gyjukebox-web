@@ -1,7 +1,13 @@
 import React from "react";
-import Login from "./Login";
-import SearchList from "./SearchList";
-import * as jukeboxApi from "./api";
+import Login from "../Login";
+import SearchBar from "../SearchBar";
+import SearchList from "../SearchList";
+import AlbumListItem from "../AlbumListItem";
+import ArtistLiteItem from "../ArtistListItem";
+import PlaylistListItem from "../PlaylistListItem";
+import TrackListItem from "../TrackListItem";
+import * as jukeboxApi from "../api";
+import style from "./App.module.css";
 
 class App extends React.Component {
   _EMPTY_SEARCH_LIST_DATA = {
@@ -22,6 +28,7 @@ class App extends React.Component {
     this._onViewPlaylistButtonClick = this._onViewPlaylistButtonClick.bind(
       this
     );
+    this._onSearchButtonClick = this._onSearchButtonClick.bind(this);
 
     this.state = {
       login: {
@@ -102,6 +109,22 @@ class App extends React.Component {
     }));
   }
 
+  async _onSearchButtonClick(q) {
+    const { albums, artists, tracks, playlists } = await jukeboxApi.search(q);
+    this.setState(state => ({
+      history: [
+        ...state.history,
+        {
+          ...this._EMPTY_SEARCH_LIST_DATA,
+          albums,
+          artists,
+          playlists,
+          tracks
+        }
+      ]
+    }));
+  }
+
   render() {
     const { login } = this.state;
 
@@ -113,10 +136,15 @@ class App extends React.Component {
     const searchListData = this._getCurrentSearchListData();
 
     return (
-      <div>
+      <div className={style.container}>
+        <SearchBar onSearchButtonClick={this._onSearchButtonClick} />
         <SearchList
           {...searchListData}
           inQueueTracks={inQueueTracks}
+          albumComponent={AlbumListItem}
+          artistComponent={ArtistLiteItem}
+          playlistComponent={PlaylistListItem}
+          trackComponent={TrackListItem}
           onQueueTrackButtonClick={this._onQueueTrackButtonClick}
           onViewAlbumButtonClick={this._onViewAlbumButtonClick}
           onViewArtistButtonClick={this._onViewArtistButtonClick}
