@@ -8,6 +8,7 @@ import ArtistLiteItem from "../ArtistListItem";
 import PlaylistListItem from "../PlaylistListItem";
 import TrackListItem from "../TrackListItem";
 import PollingCurrentTrack from "../PollingCurrentTrack";
+import Player from "../Player";
 import * as jukeboxApi from "../api";
 import style from "./App.module.css";
 
@@ -176,6 +177,7 @@ class App extends React.Component {
         <PollingCurrentTrack
           onCurrentTrackChange={this._onCurrentTrackChange}
         />
+        <Player />
       </div>
     );
   }
