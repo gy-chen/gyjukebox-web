@@ -2,6 +2,7 @@ import React from "react";
 import Login from "../Login";
 import SearchBar from "../SearchBar";
 import SearchList from "../SearchList";
+import FooterBar from "../FooterBar";
 import AlbumListItem from "../AlbumListItem";
 import ArtistLiteItem from "../ArtistListItem";
 import PlaylistListItem from "../PlaylistListItem";
@@ -36,6 +37,7 @@ class App extends React.Component {
         token: null
       },
       inQueueTracks: [],
+      currentTrack: null,
       history: []
     };
   }
@@ -132,24 +134,31 @@ class App extends React.Component {
       return <Login onLoginCallback={this._onLoginCallback} />;
     }
 
-    const { inQueueTracks } = this.state;
+    const { inQueueTracks, currentTrack } = this.state;
     const searchListData = this._getCurrentSearchListData();
 
     return (
       <div className={style.container}>
-        <SearchBar onSearchButtonClick={this._onSearchButtonClick} />
-        <SearchList
-          {...searchListData}
-          inQueueTracks={inQueueTracks}
-          albumComponent={AlbumListItem}
-          artistComponent={ArtistLiteItem}
-          playlistComponent={PlaylistListItem}
-          trackComponent={TrackListItem}
-          onQueueTrackButtonClick={this._onQueueTrackButtonClick}
-          onViewAlbumButtonClick={this._onViewAlbumButtonClick}
-          onViewArtistButtonClick={this._onViewArtistButtonClick}
-          onViewPlaylistButtonClick={this._onViewPlaylistButtonClick}
-        />
+        <div className={style.searchBarContainer}>
+          <SearchBar onSearchButtonClick={this._onSearchButtonClick} />
+        </div>
+        <div className={style.searchListContainer}>
+          <SearchList
+            {...searchListData}
+            inQueueTracks={inQueueTracks}
+            albumComponent={AlbumListItem}
+            artistComponent={ArtistLiteItem}
+            playlistComponent={PlaylistListItem}
+            trackComponent={TrackListItem}
+            onQueueTrackButtonClick={this._onQueueTrackButtonClick}
+            onViewAlbumButtonClick={this._onViewAlbumButtonClick}
+            onViewArtistButtonClick={this._onViewArtistButtonClick}
+            onViewPlaylistButtonClick={this._onViewPlaylistButtonClick}
+          />
+        </div>
+        <div className={style.footerBarContainer}>
+          <FooterBar currentTrack={currentTrack} />
+        </div>
       </div>
     );
   }

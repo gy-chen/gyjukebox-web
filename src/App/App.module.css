@@ -1,3 +1,19 @@
 .container {
-  padding: 16px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchBarContainer {
+  flex-shrink: 0;
+  margin: 8px;
+}
+
+.searchListContainer {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.footerBarContainer {
+  flex-shrink: 0;
 }
