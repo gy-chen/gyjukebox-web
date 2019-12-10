@@ -11,6 +11,7 @@ class SearchList extends React.Component {
     this._renderArtists = this._renderArtists.bind(this);
     this._renderPlaylists = this._renderPlaylists.bind(this);
     this._renderTracks = this._renderTracks.bind(this);
+    this._isTrackInQueue = this._isTrackInQueue.bind(this);
   }
 
   _renderAlbums() {
@@ -114,11 +115,15 @@ class SearchList extends React.Component {
     );
   }
 
+  _isTrackInQueue(track) {
+    const { inQueueTracks } = this.props;
+    return inQueueTracks.map(track => track.uri).includes(track.uri);
+  }
+
   _renderTracks() {
     const {
       tracks,
       trackComponent: TrackComponent,
-      inQueueTracks,
       onQueueTrackButtonClick,
       onViewAlbumButtonClick,
       onViewArtistButtonClick
@@ -147,7 +152,7 @@ class SearchList extends React.Component {
           >
             <TrackComponent
               track={track}
-              inQueue={inQueueTracks.includes(track.uri)}
+              inQueue={this._isTrackInQueue(track)}
               onQueueTrackButtonClick={onQueueTrackButtonClick}
               onViewAlbumButtonClick={onViewAlbumButtonClick}
               onViewArtistButtonClick={onViewArtistButtonClick}
