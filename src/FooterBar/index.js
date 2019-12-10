@@ -4,7 +4,9 @@ import CurrentTrack from "../CurrentTrack";
 import style from "./FooterBar.module.css";
 
 const FooterBar = props => {
-  const { currentTrack } = props;
+  let { currentTrack } = props;
+
+  currentTrack = currentTrack || {};
 
   return (
     <div className={style.container}>
@@ -15,10 +17,6 @@ const FooterBar = props => {
 
 FooterBar.propTypes = {
   currentTrack: PropTypes.object
-};
-
-FooterBar.defaultProps = {
-  currentTrack: {}
 };
 
 export default FooterBar;
