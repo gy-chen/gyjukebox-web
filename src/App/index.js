@@ -21,7 +21,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this._getCurrentSearchListData = this._getCurrentSearchListData.bind(this);
+    this._onPopState = this._onPopState.bind(this);
+    this._pushState = this._pushState.bind(this);
     this._onLoginCallback = this._onLoginCallback.bind(this);
     this._onQueueTrackButtonClick = this._onQueueTrackButtonClick.bind(this);
     this._onViewAlbumButtonClick = this._onViewAlbumButtonClick.bind(this);
@@ -38,18 +39,21 @@ class App extends React.Component {
       },
       inQueueTracks: [],
       currentTrack: null,
-      history: []
+      currentSearchListData: this._EMPTY_SEARCH_LIST_DATA
     };
+
+    window.onpopstate = this._onPopState;
   }
 
-  _getCurrentSearchListData() {
-    const { history } = this.state;
+  _onPopState(event) {
+    this.setState({
+      currentSearchListData: event.state
+    });
+  }
 
-    if (history.length === 0) {
-      return this._EMPTY_SEARCH_LIST_DATA;
-    }
-
-    return history[history.length - 1];
+  _pushState() {
+    const { currentSearchListData } = this.state;
+    window.history.pushState(currentSearchListData, null, "/");
   }
 
   _onLoginCallback(token) {
@@ -60,7 +64,10 @@ class App extends React.Component {
           token
         }
       },
-      () => jukeboxApi.setAuthorizationToken(token)
+      () => {
+        jukeboxApi.setAuthorizationToken(token);
+        window.history.replaceState(this._EMPTY_SEARCH_LIST_DATA, null, "/");
+      }
     );
   }
 
@@ -73,58 +80,58 @@ class App extends React.Component {
 
   async _onViewAlbumButtonClick(album) {
     const { tracks } = await jukeboxApi.getAlbumTracks(album);
-    this.setState(state => ({
-      history: [
-        ...state.history,
-        {
+    this.setState(
+      {
+        currentSearchListData: {
           ...this._EMPTY_SEARCH_LIST_DATA,
           tracks
         }
-      ]
-    }));
+      },
+      this._pushState
+    );
   }
 
   async _onViewArtistButtonClick(artist) {
     const { tracks, albums } = await jukeboxApi.getArtistDetails(artist);
-    this.setState(state => ({
-      history: [
-        ...state.history,
-        {
+    this.setState(
+      {
+        currentSearchListData: {
           ...this._EMPTY_SEARCH_LIST_DATA,
           tracks,
           albums
         }
-      ]
-    }));
+      },
+      this._pushState
+    );
   }
 
   async _onViewPlaylistButtonClick(playlist) {
     const { tracks } = await jukeboxApi.getPlaylistTracks(playlist);
-    this.setState(state => ({
-      history: [
-        ...state.history,
-        {
+    this.setState(
+      {
+        currentSearchListData: {
           ...this._EMPTY_SEARCH_LIST_DATA,
           tracks
         }
-      ]
-    }));
+      },
+      this._pushState
+    );
   }
 
   async _onSearchButtonClick(q) {
     const { albums, artists, tracks, playlists } = await jukeboxApi.search(q);
-    this.setState(state => ({
-      history: [
-        ...state.history,
-        {
+    this.setState(
+      {
+        currentSearchListData: {
           ...this._EMPTY_SEARCH_LIST_DATA,
           albums,
           artists,
           playlists,
           tracks
         }
-      ]
-    }));
+      },
+      this._pushState
+    );
   }
 
   render() {
@@ -134,8 +141,7 @@ class App extends React.Component {
       return <Login onLoginCallback={this._onLoginCallback} />;
     }
 
-    const { inQueueTracks, currentTrack } = this.state;
-    const searchListData = this._getCurrentSearchListData();
+    const { inQueueTracks, currentTrack, currentSearchListData } = this.state;
 
     return (
       <div className={style.container}>
@@ -144,7 +150,7 @@ class App extends React.Component {
         </div>
         <div className={style.searchListContainer}>
           <SearchList
-            {...searchListData}
+            {...currentSearchListData}
             inQueueTracks={inQueueTracks}
             albumComponent={AlbumListItem}
             artistComponent={ArtistLiteItem}
