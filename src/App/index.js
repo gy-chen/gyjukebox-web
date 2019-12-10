@@ -7,6 +7,7 @@ import AlbumListItem from "../AlbumListItem";
 import ArtistLiteItem from "../ArtistListItem";
 import PlaylistListItem from "../PlaylistListItem";
 import TrackListItem from "../TrackListItem";
+import PollingCurrentTrack from "../PollingCurrentTrack";
 import * as jukeboxApi from "../api";
 import style from "./App.module.css";
 
@@ -23,6 +24,7 @@ class App extends React.Component {
 
     this._onPopState = this._onPopState.bind(this);
     this._pushState = this._pushState.bind(this);
+    this._onCurrentTrackChange = this._onCurrentTrackChange.bind(this);
     this._onLoginCallback = this._onLoginCallback.bind(this);
     this._onQueueTrackButtonClick = this._onQueueTrackButtonClick.bind(this);
     this._onViewAlbumButtonClick = this._onViewAlbumButtonClick.bind(this);
@@ -54,6 +56,12 @@ class App extends React.Component {
   _pushState() {
     const { currentSearchListData } = this.state;
     window.history.pushState(currentSearchListData, null, "/");
+  }
+
+  _onCurrentTrackChange(currentTrack) {
+    this.setState({
+      currentTrack
+    });
   }
 
   _onLoginCallback(token) {
@@ -165,6 +173,9 @@ class App extends React.Component {
         <div className={style.footerBarContainer}>
           <FooterBar currentTrack={currentTrack} />
         </div>
+        <PollingCurrentTrack
+          onCurrentTrackChange={this._onCurrentTrackChange}
+        />
       </div>
     );
   }
