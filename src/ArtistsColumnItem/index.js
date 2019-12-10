@@ -27,7 +27,7 @@ const ArtistsColumnItem = props => {
   return _renderArtists();
 };
 
-ArtistColumnItem.propTypes = {
+ArtistsColumnItem.propTypes = {
   artists: PropTypes.array.isRequired,
   onViewArtistButtonClick: PropTypes.func
 };
