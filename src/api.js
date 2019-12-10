@@ -18,7 +18,14 @@ export const enqueue = track => instance.post(`/track/${track.id}/enqueue`);
 
 export const getCurrentTrack = async () => {
   const rv = await instance.get("/track/current");
-  return rv.data;
+  const currentTrack = rv.data;
+  if (!currentTrack) {
+    return {
+      track: null,
+      user: null
+    };
+  }
+  return currentTrack;
 };
 
 export const getAlbumTracks = async (album, offset = 0) => {
