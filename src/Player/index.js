@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Hls from "hls.js";
 
 const HLS_LOCATION = process.env.REACT_APP_HLS_LOCATION;
@@ -20,6 +21,18 @@ class Player extends React.PureComponent {
     this._hls.on(Hls.Events.MEDIA_ATTACHED, this._onMediaAttached);
   }
 
+  componentDidUpdate(prevProps) {
+    const { prevPlay } = prevProps;
+    const play = this.props;
+    if (prevPlay !== play) {
+      if (play) {
+        this._audioRef.current.play();
+      } else {
+        this._audioRef.current.pause();
+      }
+    }
+  }
+
   _onMediaAttached() {
     this._hls.loadSource(HLS_LOCATION);
     this._hls.on(Hls.Events.MANIFEST_PARSED, this._onManifestParsed);
@@ -27,7 +40,9 @@ class Player extends React.PureComponent {
   }
 
   _onManifestParsed() {
-    this._audioRef.current.play();
+    const { onPlayerReady } = this.props;
+
+    onPlayerReady && onPlayerReady();
   }
 
   _onError(_, data) {
@@ -40,5 +55,10 @@ class Player extends React.PureComponent {
     return <audio ref={this._audioRef}></audio>;
   }
 }
+
+Player.propTypes = {
+  onPlayerReady: PropTypes.func,
+  play: PropTypes.bool
+};
 
 export default Player;

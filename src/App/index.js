@@ -23,6 +23,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this._onPlayButtonClick = this._onPlayButtonClick.bind(this);
+    this._onPlayerReady = this._onPlayerReady.bind(this);
     this._onPopState = this._onPopState.bind(this);
     this._pushState = this._pushState.bind(this);
     this._onCurrentTrackChange = this._onCurrentTrackChange.bind(this);
@@ -42,10 +44,25 @@ class App extends React.Component {
       },
       inQueueTracks: [],
       currentTrack: null,
-      currentSearchListData: this._EMPTY_SEARCH_LIST_DATA
+      currentSearchListData: this._EMPTY_SEARCH_LIST_DATA,
+      displayPlayButton: false,
+      play: false
     };
 
     window.onpopstate = this._onPopState;
+  }
+
+  _onPlayButtonClick() {
+    this.setState({
+      play: true,
+      displayPlayButton: false
+    });
+  }
+
+  _onPlayerReady() {
+    this.setState({
+      displayPlayButton: true
+    });
   }
 
   _onPopState(event) {
@@ -150,7 +167,13 @@ class App extends React.Component {
       return <Login onLoginCallback={this._onLoginCallback} />;
     }
 
-    const { inQueueTracks, currentTrack, currentSearchListData } = this.state;
+    const {
+      inQueueTracks,
+      currentTrack,
+      currentSearchListData,
+      displayPlayButton,
+      play
+    } = this.state;
 
     return (
       <div className={style.container}>
@@ -172,12 +195,16 @@ class App extends React.Component {
           />
         </div>
         <div className={style.footerBarContainer}>
-          <FooterBar currentTrack={currentTrack} />
+          <FooterBar
+            currentTrack={currentTrack}
+            displayPlayButton={displayPlayButton}
+            onPlayButtonClick={this._onPlayButtonClick}
+          />
         </div>
         <PollingCurrentTrack
           onCurrentTrackChange={this._onCurrentTrackChange}
         />
-        <Player />
+        <Player onPlayerReady={this._onPlayerReady} play={play} />
       </div>
     );
   }
