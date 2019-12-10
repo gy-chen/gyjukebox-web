@@ -17,4 +17,8 @@ FooterBar.propTypes = {
   currentTrack: PropTypes.object
 };
 
+FooterBar.defaultProps = {
+  currentTrack: {}
+};
+
 export default FooterBar;
