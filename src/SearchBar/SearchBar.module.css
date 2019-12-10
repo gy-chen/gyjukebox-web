@@ -13,4 +13,5 @@
 .searchButton {
   border-radius: 0 0.5em 0.5em 0;
   border-color: black;
+  border-width: 1px 1px 1px 0;
 }
