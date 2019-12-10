@@ -47,7 +47,7 @@ class Player extends React.PureComponent {
 
   _onError(_, data) {
     if (data.type === "networkError") {
-      setTimeout(() => this._hls.loadSource(HLS_LOCATION), 2000);
+      this._hls.startLoad();
     }
   }
 
