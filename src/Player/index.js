@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import PropTypes from "prop-types";
 import Hls from "hls.js";
@@ -11,6 +12,10 @@ class Player extends React.PureComponent {
     this._onMediaAttached = this._onMediaAttached.bind(this);
     this._onManifestParsed = this._onManifestParsed.bind(this);
     this._onError = this._onError.bind(this);
+    this._retryLoadResource = _.throttle(
+      this._retryLoadResource.bind(this),
+      2000
+    );
 
     this._audioRef = React.createRef();
     this._hls = new Hls();
@@ -46,9 +51,14 @@ class Player extends React.PureComponent {
   }
 
   _onError(_, data) {
-    if (data.type === "networkError") {
-      this._hls.startLoad();
+    if (data.fatal) {
+      console.log("encounter fatal error, try to recover", data);
+      this._retryLoadResource();
     }
+  }
+
+  _retryLoadResource() {
+    this._hls.loadSource(HLS_LOCATION);
   }
 
   render() {
