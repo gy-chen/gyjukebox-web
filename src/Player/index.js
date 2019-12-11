@@ -19,6 +19,7 @@ class Player extends React.PureComponent {
 
     this._audioRef = React.createRef();
     this._hls = new Hls();
+    this._mediaParsed = false;
   }
 
   componentDidMount() {
@@ -47,13 +48,18 @@ class Player extends React.PureComponent {
   _onManifestParsed() {
     const { onPlayerReady } = this.props;
 
+    this._mediaParsed = true;
     onPlayerReady && onPlayerReady();
   }
 
   _onError(_, data) {
     if (data.fatal) {
       console.log("encounter fatal error, try to recover", data);
-      this._retryLoadResource();
+      if (this._mediaParsed) {
+        this._hls.startLoad();
+      } else {
+        this._retryLoadResource();
+      }
     }
   }
 
