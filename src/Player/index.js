@@ -18,7 +18,9 @@ class Player extends React.PureComponent {
     );
 
     this._audioRef = React.createRef();
-    this._hls = new Hls();
+    this._hls = new Hls({
+      maxBufferLength: 120
+    });
     this._mediaParsed = false;
   }
 
