@@ -15,8 +15,9 @@ class Login extends React.Component {
   componentDidMount() {
     const { onLoginCallback } = this.props;
 
-    const token = fetchTokenFromUrl();
+    const token = fetchTokenFromUrl() || localStorage.getItem("LoginToken");
     if (token) {
+      localStorage.setItem("LoginToken", token);
       onLoginCallback && onLoginCallback(token);
     }
   }
