@@ -18,15 +18,22 @@ class Player extends React.PureComponent {
     );
 
     this._audioRef = React.createRef();
-    this._hls = new Hls({
-      maxBufferLength: 120
-    });
+    this._hls = null;
     this._mediaParsed = false;
   }
 
   componentDidMount() {
-    this._hls.attachMedia(this._audioRef.current);
-    this._hls.on(Hls.Events.MEDIA_ATTACHED, this._onMediaAttached);
+    if (Hls.isSupported()) {
+      this._hls = new Hls();
+      this._hls.attachMedia(this._audioRef.current);
+      this._hls.on(Hls.Events.MEDIA_ATTACHED, this._onMediaAttached);
+    } else {
+      this._audioRef.current.src = HLS_LOCATION;
+      this._audioRef.current.addEventListener(
+        "loadedmetadata",
+        this._onManifestParsed
+      );
+    }
   }
 
   componentDidUpdate(prevProps) {
