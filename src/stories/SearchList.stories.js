@@ -28,6 +28,7 @@ export const basic = () => (
     onViewAlbumButtonClick={action("onViewAlbumButtonClick")}
     onViewArtistButtonClick={action("onViewArtistButtonClick")}
     onViewPlaylistButtonClick={action("onViewPlaylistButtonClick")}
+    onQueueAlbumButtonClick={action("onQueueAlbumButtonClick")}
   />
 );
 

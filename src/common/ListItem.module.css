@@ -1,0 +1,10 @@
+.operationIcon {
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50%;
+  width: 1.6em;
+  height: 1.6em;
+  vertical-align: bottom;
+  cursor: pointer;
+  box-sizing: border-box;
+}

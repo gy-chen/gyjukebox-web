@@ -19,7 +19,8 @@ class SearchList extends React.Component {
       albums,
       albumComponent: AlbumComponent,
       onViewAlbumButtonClick,
-      onViewArtistButtonClick
+      onViewArtistButtonClick,
+      onQueueAlbumButtonClick
     } = this.props;
     if (!AlbumComponent || !albums || albums.length === 0) {
       return null;
@@ -32,6 +33,9 @@ class SearchList extends React.Component {
         >
           <div className={style.rowHeader}>Album</div>
           <div className={style.rowHeader}>Artist</div>
+          <div className={style.rowHeader}>
+            <GearIcon />
+          </div>
         </li>
         {albums.map(album => (
           <li
@@ -41,6 +45,7 @@ class SearchList extends React.Component {
               album={album}
               onViewAlbumButtonClick={onViewAlbumButtonClick}
               onViewArtistButtonClick={onViewArtistButtonClick}
+              onQueueAlbumButtonClick={onQueueAlbumButtonClick}
             />
           </li>
         ))}
@@ -192,7 +197,8 @@ SearchList.propTypes = {
   onQueueTrackButtonClick: PropTypes.func,
   onViewAlbumButtonClick: PropTypes.func,
   onViewArtistButtonClick: PropTypes.func,
-  onViewPlaylistButtonClick: PropTypes.func
+  onViewPlaylistButtonClick: PropTypes.func,
+  onQueueAlbumButtonClick: PropTypes.func
 };
 
 SearchList.defaultProps = {
