@@ -21,8 +21,8 @@ export const basic = () => (
     trackComponent={TrackListItem}
     playlistComponent={PlaylistListItem}
     inQueueTracks={[
-      "spotify:track:5DXt0rgXsJPkU6sBCh4L4J",
-      "spotify:track:4aebBr4JAihzJQR0CiIZJv"
+      { uri: "spotify:track:5DXt0rgXsJPkU6sBCh4L4J" },
+      { uri: "spotify:track:4aebBr4JAihzJQR0CiIZJv" }
     ]}
     onQueueTrackButtonClick={action("onQueueTrackButtonClick")}
     onViewAlbumButtonClick={action("onViewAlbumButtonClick")}
@@ -45,8 +45,8 @@ export const withSimpleDisplay = () => {
       playlistComponent={SimpleDisplay}
       trackComponent={SimpleDisplay}
       inQueueTracks={[
-        "spotify:track:5DXt0rgXsJPkU6sBCh4L4J",
-        "spotify:track:4aebBr4JAihzJQR0CiIZJv"
+        { uri: "spotify:track:5DXt0rgXsJPkU6sBCh4L4J" },
+        { uri: "spotify:track:4aebBr4JAihzJQR0CiIZJv" }
       ]}
     />
   );
