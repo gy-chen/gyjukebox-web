@@ -4,6 +4,11 @@
   padding: 8px;
 }
 
-.plusIcon {
+.queueButton {
   composes: operationIcon from "../common/ListItem.module.css";
+}
+
+.queuedButton {
+  composes: operationIcon from "../common/ListItem.module.css";
+  cursor: unset;
 }

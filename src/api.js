@@ -14,7 +14,14 @@ export const search = async (q, offset = 0) => {
   return rv.data;
 };
 
-export const enqueue = track => instance.post(`/track/${track.id}/enqueue`);
+export const enqueueTrack = track =>
+  instance.post(`/track/${track.id}/enqueue`);
+
+export const enqueueAlbum = album =>
+  instance.post(`/album/${album.id}/enqueue`);
+
+export const enqueuePlaylist = playlist =>
+  instance.post(`/playlist/${playlist.id}/enqueue`);
 
 export const getCurrentTrack = async () => {
   const rv = await instance.get("/track/current");

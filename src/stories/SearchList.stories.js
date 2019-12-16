@@ -24,6 +24,14 @@ export const basic = () => (
       { uri: "spotify:track:5DXt0rgXsJPkU6sBCh4L4J" },
       { uri: "spotify:track:4aebBr4JAihzJQR0CiIZJv" }
     ]}
+    inQueueAlbums={[
+      { uri: "spotify:album:7jyiXKzJYgJ24IqlGMKcjN" },
+      { uri: "spotify:album:2F8NmuQpBw8tAuusp7w3v5" }
+    ]}
+    inQueuePlaylists={[
+      { uri: "spotify:playlist:4js6I1fwjC60SnT3gPpCvl" },
+      { uri: "spotify:playlist:6xwq4yX7Iwcpk8h2BjvKBb" }
+    ]}
     onQueueTrackButtonClick={action("onQueueTrackButtonClick")}
     onViewAlbumButtonClick={action("onViewAlbumButtonClick")}
     onViewArtistButtonClick={action("onViewArtistButtonClick")}

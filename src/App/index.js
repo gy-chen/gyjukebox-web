@@ -36,6 +36,10 @@ class App extends React.Component {
     this._onCurrentTrackChange = this._onCurrentTrackChange.bind(this);
     this._onLoginCallback = this._onLoginCallback.bind(this);
     this._onQueueTrackButtonClick = this._onQueueTrackButtonClick.bind(this);
+    this._onQueueAlbumButtonClick = this._onQueueAlbumButtonClick.bind(this);
+    this._onQueuePlaylistButtonClick = this._onQueuePlaylistButtonClick.bind(
+      this
+    );
     this._onViewAlbumButtonClick = this._onViewAlbumButtonClick.bind(this);
     this._onViewArtistButtonClick = this._onViewArtistButtonClick.bind(this);
     this._onViewPlaylistButtonClick = this._onViewPlaylistButtonClick.bind(
@@ -49,6 +53,8 @@ class App extends React.Component {
         token: null
       },
       inQueueTracks: [],
+      inQueueAlbums: [],
+      inQueuePlaylists: [],
       currentTrack: null,
       currentSearchListData: this._EMPTY_SEARCH_LIST_DATA,
       playerState: _PlayerState.WAIT
@@ -110,9 +116,23 @@ class App extends React.Component {
   }
 
   async _onQueueTrackButtonClick(track) {
-    await jukeboxApi.enqueue(track);
+    await jukeboxApi.enqueueTrack(track);
     this.setState(state => ({
       inQueueTracks: [...state.inQueueTracks, track]
+    }));
+  }
+
+  async _onQueueAlbumButtonClick(album) {
+    await jukeboxApi.enqueueAlbum(album);
+    this.setState(state => ({
+      inQueueAlbums: [...state.inQueueAlbums, album]
+    }));
+  }
+
+  async _onQueuePlaylistButtonClick(playlist) {
+    await jukeboxApi.enqueuePlaylist(playlist);
+    this.setState(state => ({
+      inQueuePlaylists: [...state.inQueuePlaylists, playlist]
     }));
   }
 
@@ -181,6 +201,8 @@ class App extends React.Component {
 
     const {
       inQueueTracks,
+      inQueueAlbums,
+      inQueuePlaylists,
       currentTrack,
       currentSearchListData,
       playerState
@@ -195,11 +217,15 @@ class App extends React.Component {
           <SearchList
             {...currentSearchListData}
             inQueueTracks={inQueueTracks}
+            inQueueAlbums={inQueueAlbums}
+            inQueuePlaylists={inQueuePlaylists}
             albumComponent={AlbumListItem}
             artistComponent={ArtistLiteItem}
             playlistComponent={PlaylistListItem}
             trackComponent={TrackListItem}
             onQueueTrackButtonClick={this._onQueueTrackButtonClick}
+            onQueueAlbumButtonClick={this._onQueueAlbumButtonClick}
+            onQueuePlaylistButtonClick={this._onQueuePlaylistButtonClick}
             onViewAlbumButtonClick={this._onViewAlbumButtonClick}
             onViewArtistButtonClick={this._onViewArtistButtonClick}
             onViewPlaylistButtonClick={this._onViewPlaylistButtonClick}

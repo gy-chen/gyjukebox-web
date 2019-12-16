@@ -12,6 +12,8 @@ class SearchList extends React.Component {
     this._renderPlaylists = this._renderPlaylists.bind(this);
     this._renderTracks = this._renderTracks.bind(this);
     this._isTrackInQueue = this._isTrackInQueue.bind(this);
+    this._isAlbumInQueue = this._isAlbumInQueue.bind(this);
+    this._isPlaylistInQueue = this._isPlaylistInQueue.bind(this);
   }
 
   _renderAlbums() {
@@ -46,6 +48,7 @@ class SearchList extends React.Component {
               onViewAlbumButtonClick={onViewAlbumButtonClick}
               onViewArtistButtonClick={onViewArtistButtonClick}
               onQueueAlbumButtonClick={onQueueAlbumButtonClick}
+              inQueue={this._isAlbumInQueue(album)}
             />
           </li>
         ))}
@@ -118,6 +121,7 @@ class SearchList extends React.Component {
               playlist={playlist}
               onViewPlaylistButtonClick={onViewPlaylistButtonClick}
               onQueuePlaylistButtonClick={onQueuePlaylistButtonClick}
+              inQueue={this._isPlaylistInQueue(playlist)}
             />
           </li>
         ))}
@@ -128,6 +132,18 @@ class SearchList extends React.Component {
   _isTrackInQueue(track) {
     const { inQueueTracks } = this.props;
     return inQueueTracks.map(track => track.uri).includes(track.uri);
+  }
+
+  _isAlbumInQueue(album) {
+    const { inQueueAlbums } = this.props;
+    return inQueueAlbums.map(album => album.uri).includes(album.uri);
+  }
+
+  _isPlaylistInQueue(playlist) {
+    const { inQueuePlaylists } = this.props;
+    return inQueuePlaylists
+      .map(playlist => playlist.uri)
+      .includes(playlist.uri);
   }
 
   _renderTracks() {
@@ -199,6 +215,8 @@ SearchList.propTypes = {
   playlistComponent: PropTypes.elementType,
   trackComponent: PropTypes.elementType,
   inQueueTracks: PropTypes.array,
+  inQueueAlbums: PropTypes.array,
+  inQueuePlaylists: PropTypes.array,
   onQueueTrackButtonClick: PropTypes.func,
   onViewAlbumButtonClick: PropTypes.func,
   onViewArtistButtonClick: PropTypes.func,
@@ -208,7 +226,9 @@ SearchList.propTypes = {
 };
 
 SearchList.defaultProps = {
-  inQueueTracks: []
+  inQueueTracks: [],
+  inQueueAlbums: [],
+  inQueuePlaylists: []
 };
 
 export default SearchList;
