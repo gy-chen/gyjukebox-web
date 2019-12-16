@@ -12,6 +12,12 @@ import Player from "../Player";
 import * as jukeboxApi from "../api";
 import style from "./App.module.css";
 
+const _PlayerState = {
+  WAIT: 1,
+  READY: 2,
+  PLAY: 3
+};
+
 class App extends React.Component {
   _EMPTY_SEARCH_LIST_DATA = {
     albums: null,
@@ -45,23 +51,29 @@ class App extends React.Component {
       inQueueTracks: [],
       currentTrack: null,
       currentSearchListData: this._EMPTY_SEARCH_LIST_DATA,
-      displayPlayButton: false,
-      play: false
+      playerState: _PlayerState.WAIT
     };
 
     window.onpopstate = this._onPopState;
   }
 
   _onPlayButtonClick() {
+    const { playerState } = this.state;
+    if (playerState !== _PlayerState.READY) {
+      return;
+    }
     this.setState({
-      play: true,
-      displayPlayButton: false
+      playerState: _PlayerState.PLAY
     });
   }
 
   _onPlayerReady() {
+    const { playerState } = this.state;
+    if (playerState !== _PlayerState.WAIT) {
+      return;
+    }
     this.setState({
-      displayPlayButton: true
+      playerState: _PlayerState.READY
     });
   }
 
@@ -171,8 +183,7 @@ class App extends React.Component {
       inQueueTracks,
       currentTrack,
       currentSearchListData,
-      displayPlayButton,
-      play
+      playerState
     } = this.state;
 
     return (
@@ -197,14 +208,17 @@ class App extends React.Component {
         <div className={style.footerBarContainer}>
           <FooterBar
             currentTrack={currentTrack}
-            displayPlayButton={displayPlayButton}
+            displayPlayButton={playerState === _PlayerState.READY}
             onPlayButtonClick={this._onPlayButtonClick}
           />
         </div>
         <PollingCurrentTrack
           onCurrentTrackChange={this._onCurrentTrackChange}
         />
-        <Player onPlayerReady={this._onPlayerReady} play={play} />
+        <Player
+          onPlayerReady={this._onPlayerReady}
+          play={playerState === _PlayerState.PLAY}
+        />
       </div>
     );
   }
