@@ -1,5 +1,9 @@
 .container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr 1fr 0.5fr;
   padding: 8px;
+}
+
+.plusIcon {
+  composes: operationIcon from "../common/ListItem.module.css";
 }

@@ -90,7 +90,8 @@ class SearchList extends React.Component {
     const {
       playlists,
       playlistComponent: PlaylistComponent,
-      onViewPlaylistButtonClick
+      onViewPlaylistButtonClick,
+      onQueuePlaylistButtonClick
     } = this.props;
     if (!PlaylistComponent || !playlists || playlists.length === 0) {
       return null;
@@ -104,6 +105,9 @@ class SearchList extends React.Component {
         >
           <div className={style.rowHeader}>Playlist</div>
           <div className={style.rowHeader}>Owner</div>
+          <div className={style.rowHeader}>
+            <GearIcon />
+          </div>
         </li>
         {playlists.map(playlist => (
           <li
@@ -113,6 +117,7 @@ class SearchList extends React.Component {
             <PlaylistComponent
               playlist={playlist}
               onViewPlaylistButtonClick={onViewPlaylistButtonClick}
+              onQueuePlaylistButtonClick={onQueuePlaylistButtonClick}
             />
           </li>
         ))}
@@ -198,7 +203,8 @@ SearchList.propTypes = {
   onViewAlbumButtonClick: PropTypes.func,
   onViewArtistButtonClick: PropTypes.func,
   onViewPlaylistButtonClick: PropTypes.func,
-  onQueueAlbumButtonClick: PropTypes.func
+  onQueueAlbumButtonClick: PropTypes.func,
+  onQueuePlaylistButtonClick: PropTypes.func
 };
 
 SearchList.defaultProps = {
