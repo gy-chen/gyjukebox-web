@@ -23,7 +23,7 @@ const SearchBar = props => {
         onChange={e => setQ(e.target.value)}
       />
       <button className={style.searchButton} onClick={_onSearchButtonClick}>
-        <SearchIcon />
+        <SearchIcon className={style.searchIcon} />
       </button>
     </form>
   );

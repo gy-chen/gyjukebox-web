@@ -8,10 +8,15 @@
   border-width: 1px 0 1px 1px;
   border-radius: 0.5em 0 0 0.5em;
   padding: 4px;
+  flex-grow: 1;
 }
 
 .searchButton {
   border-radius: 0 0.5em 0.5em 0;
   border-color: black;
   border-width: 1px 1px 1px 0;
+}
+
+.searchIcon {
+  vertical-align: baseline;
 }

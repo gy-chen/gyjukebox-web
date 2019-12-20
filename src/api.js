@@ -54,3 +54,35 @@ export const getPlaylistTracks = async (playlist, offset = 0) => {
   rv.data.tracks = rv.data.tracks.map(playlistTrack => playlistTrack.track);
   return rv.data;
 };
+
+export const getUserTop = async (offset = 0) => {
+  const params = { offset };
+  const rv = await instance.get("/me/top", { params });
+  return rv.data;
+};
+
+export const getUserPlaylists = async (offset = 0) => {
+  const params = { offset };
+  const rv = await instance.get("/me/playlists", { params });
+  return rv.data;
+};
+
+export const getUserAlbums = async (offset = 0) => {
+  const params = { offset };
+  const rv = await instance.get("/me/albums", { params });
+  rv.data.albums = rv.data.albums.map(userAlbum => userAlbum.album);
+  return rv.data;
+};
+
+export const getUserArtists = async (after = null) => {
+  const params = { after };
+  const rv = await instance.get("/me/artists", { params });
+  return rv.data;
+};
+
+export const getUserTracks = async (offset = 0) => {
+  const params = { offset };
+  const rv = await instance.get("/me/tracks", { params });
+  rv.data.tracks = rv.data.tracks.map(userTrack => userTrack.track);
+  return rv.data;
+};

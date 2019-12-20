@@ -1,0 +1,10 @@
+.container {
+  font-size: 1.2em;
+  border: solid 1px;
+  padding: 0 4px;
+  border-radius: 8px;
+}
+
+.exitIcon {
+  vertical-align: baseline;
+}

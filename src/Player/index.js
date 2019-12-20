@@ -48,6 +48,10 @@ class Player extends React.PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this._hls && this._hls.destroy();
+  }
+
   _onMediaAttached() {
     this._hls.loadSource(HLS_LOCATION);
     this._hls.on(Hls.Events.MANIFEST_PARSED, this._onManifestParsed);

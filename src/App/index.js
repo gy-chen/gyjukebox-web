@@ -1,6 +1,6 @@
 import React from "react";
 import Login from "../Login";
-import SearchBar from "../SearchBar";
+import HeaderBar from "../HeaderBar";
 import SearchList from "../SearchList";
 import FooterBar from "../FooterBar";
 import AlbumListItem from "../AlbumListItem";
@@ -10,6 +10,8 @@ import TrackListItem from "../TrackListItem";
 import PollingCurrentTrack from "../PollingCurrentTrack";
 import Player from "../Player";
 import * as jukeboxApi from "../api";
+import { Tab } from "../Tabs";
+import { logout } from "../Login/utils";
 import style from "./App.module.css";
 
 const _PlayerState = {
@@ -24,6 +26,20 @@ class App extends React.Component {
     artists: null,
     playlists: null,
     tracks: null
+  };
+
+  _INITIAL_STATE = {
+    login: {
+      isLogin: false,
+      token: null
+    },
+    inQueueTracks: [],
+    inQueueAlbums: [],
+    inQueuePlaylists: [],
+    currentTrack: null,
+    currentSearchListData: this._EMPTY_SEARCH_LIST_DATA,
+    playerState: _PlayerState.WAIT,
+    tab: Tab.HOME
   };
 
   constructor(props) {
@@ -46,21 +62,28 @@ class App extends React.Component {
       this
     );
     this._onSearchButtonClick = this._onSearchButtonClick.bind(this);
+    this._refreshTabContent = this._refreshTabContent.bind(this);
+    this._refreshUserTop = this._refreshUserTop.bind(this);
+    this._refreshUserPlaylists = this._refreshUserPlaylists.bind(this);
+    this._refreshUserAlbums = this._refreshUserAlbums.bind(this);
+    this._refreshUserArtists = this._refreshUserArtists.bind(this);
+    this._refreshUserTracks = this._refreshUserTracks.bind(this);
+    this._onTabChangeButtonClick = this._onTabChangeButtonClick.bind(this);
+    this._onLogoutButtonClick = this._onLogoutButtonClick.bind(this);
+    this._logout = this._logout.bind(this);
+    this._commonApiErrorHandle = this._commonApiErrorHandle.bind(this);
 
-    this.state = {
-      login: {
-        isLogin: false,
-        token: null
-      },
-      inQueueTracks: [],
-      inQueueAlbums: [],
-      inQueuePlaylists: [],
-      currentTrack: null,
-      currentSearchListData: this._EMPTY_SEARCH_LIST_DATA,
-      playerState: _PlayerState.WAIT
-    };
+    this.state = this._INITIAL_STATE;
 
     window.onpopstate = this._onPopState;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { tab: prevTab } = prevState;
+    const { tab } = this.state;
+    if (prevTab !== tab) {
+      this._refreshTabContent();
+    }
   }
 
   _onPlayButtonClick() {
@@ -84,14 +107,17 @@ class App extends React.Component {
   }
 
   _onPopState(event) {
-    this.setState({
-      currentSearchListData: event.state
-    });
+    if (event.state === "logged_out") {
+      // don't let user read history if has already logged out
+      window.history.pushState("logged_out", null, "/");
+    } else {
+      this.setState(event.state);
+    }
   }
 
   _pushState() {
-    const { currentSearchListData } = this.state;
-    window.history.pushState(currentSearchListData, null, "/");
+    const { currentSearchListData, tab } = this.state;
+    window.history.pushState({ currentSearchListData, tab }, null, "/");
   }
 
   _onCurrentTrackChange(currentTrack) {
@@ -111,85 +137,244 @@ class App extends React.Component {
       () => {
         jukeboxApi.setAuthorizationToken(token);
         window.history.replaceState(this._EMPTY_SEARCH_LIST_DATA, null, "/");
+        this._refreshTabContent();
       }
     );
   }
 
   async _onQueueTrackButtonClick(track) {
-    await jukeboxApi.enqueueTrack(track);
-    this.setState(state => ({
-      inQueueTracks: [...state.inQueueTracks, track]
-    }));
+    try {
+      await jukeboxApi.enqueueTrack(track);
+      this.setState(state => ({
+        inQueueTracks: [...state.inQueueTracks, track]
+      }));
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
   }
 
   async _onQueueAlbumButtonClick(album) {
-    await jukeboxApi.enqueueAlbum(album);
-    this.setState(state => ({
-      inQueueAlbums: [...state.inQueueAlbums, album]
-    }));
+    try {
+      await jukeboxApi.enqueueAlbum(album);
+      this.setState(state => ({
+        inQueueAlbums: [...state.inQueueAlbums, album]
+      }));
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
   }
 
   async _onQueuePlaylistButtonClick(playlist) {
-    await jukeboxApi.enqueuePlaylist(playlist);
-    this.setState(state => ({
-      inQueuePlaylists: [...state.inQueuePlaylists, playlist]
-    }));
+    try {
+      await jukeboxApi.enqueuePlaylist(playlist);
+      this.setState(state => ({
+        inQueuePlaylists: [...state.inQueuePlaylists, playlist]
+      }));
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
   }
 
   async _onViewAlbumButtonClick(album) {
-    const { tracks } = await jukeboxApi.getAlbumTracks(album);
-    this.setState(
-      {
-        currentSearchListData: {
-          ...this._EMPTY_SEARCH_LIST_DATA,
-          tracks
-        }
-      },
-      this._pushState
-    );
+    try {
+      const { tracks } = await jukeboxApi.getAlbumTracks(album);
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            tracks
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
   }
 
   async _onViewArtistButtonClick(artist) {
-    const { tracks, albums } = await jukeboxApi.getArtistDetails(artist);
-    this.setState(
-      {
-        currentSearchListData: {
-          ...this._EMPTY_SEARCH_LIST_DATA,
-          tracks,
-          albums
-        }
-      },
-      this._pushState
-    );
+    try {
+      const { tracks, albums } = await jukeboxApi.getArtistDetails(artist);
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            tracks,
+            albums
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
   }
 
   async _onViewPlaylistButtonClick(playlist) {
-    const { tracks } = await jukeboxApi.getPlaylistTracks(playlist);
-    this.setState(
-      {
-        currentSearchListData: {
-          ...this._EMPTY_SEARCH_LIST_DATA,
-          tracks
-        }
-      },
-      this._pushState
-    );
+    try {
+      const { tracks } = await jukeboxApi.getPlaylistTracks(playlist);
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            tracks
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
   }
 
   async _onSearchButtonClick(q) {
-    const { albums, artists, tracks, playlists } = await jukeboxApi.search(q);
-    this.setState(
-      {
-        currentSearchListData: {
-          ...this._EMPTY_SEARCH_LIST_DATA,
-          albums,
-          artists,
-          playlists,
-          tracks
-        }
-      },
-      this._pushState
-    );
+    try {
+      const { albums, artists, tracks, playlists } = await jukeboxApi.search(q);
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            albums,
+            artists,
+            playlists,
+            tracks
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
+  }
+
+  _refreshTabContent() {
+    const { tab } = this.state;
+    switch (tab) {
+      case Tab.HOME:
+        this._refreshUserTop();
+        break;
+      case Tab.MY_PLAYLISTS:
+        this._refreshUserPlaylists();
+        break;
+      case Tab.MY_ALBUMS:
+        this._refreshUserAlbums();
+        break;
+      case Tab.MY_ARTISTS:
+        this._refreshUserArtists();
+        break;
+      case Tab.MY_TRACKS:
+        this._refreshUserTracks();
+        break;
+      default:
+        break;
+    }
+  }
+
+  async _refreshUserTop() {
+    try {
+      const { artists, tracks } = await jukeboxApi.getUserTop();
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            artists,
+            tracks
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
+  }
+
+  async _refreshUserPlaylists() {
+    try {
+      const { playlists } = await jukeboxApi.getUserPlaylists();
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            playlists
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
+  }
+
+  async _refreshUserAlbums() {
+    try {
+      const { albums } = await jukeboxApi.getUserAlbums();
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            albums
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
+  }
+
+  async _refreshUserArtists() {
+    try {
+      const { artists } = await jukeboxApi.getUserArtists();
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            artists
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
+  }
+
+  async _refreshUserTracks() {
+    try {
+      const { tracks } = await jukeboxApi.getUserTracks();
+      this.setState(
+        {
+          currentSearchListData: {
+            ...this._EMPTY_SEARCH_LIST_DATA,
+            tracks
+          }
+        },
+        this._pushState
+      );
+    } catch (err) {
+      this._commonApiErrorHandle(err);
+    }
+  }
+
+  _onTabChangeButtonClick(tab) {
+    this.setState({
+      tab
+    });
+  }
+
+  _logout() {
+    logout();
+    this.setState(this._INITIAL_STATE);
+    window.history.pushState("logged_out", null, "/");
+  }
+
+  _onLogoutButtonClick() {
+    this._logout();
+  }
+
+  _commonApiErrorHandle(err) {
+    // TODO show notification
+    this._logout();
   }
 
   render() {
@@ -200,6 +385,7 @@ class App extends React.Component {
     }
 
     const {
+      tab,
       inQueueTracks,
       inQueueAlbums,
       inQueuePlaylists,
@@ -210,8 +396,13 @@ class App extends React.Component {
 
     return (
       <div className={style.container}>
-        <div className={style.searchBarContainer}>
-          <SearchBar onSearchButtonClick={this._onSearchButtonClick} />
+        <div className={style.headerBarContainer}>
+          <HeaderBar
+            activeTab={tab}
+            onSearchButtonClick={this._onSearchButtonClick}
+            onTabChangeButtonClick={this._onTabChangeButtonClick}
+            onLogoutButtonClick={this._onLogoutButtonClick}
+          />
         </div>
         <div className={style.searchListContainer}>
           <SearchList

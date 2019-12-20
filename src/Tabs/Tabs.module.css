@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+}
+
+.item.active {
+  color: rgba(0, 0, 0, 0.95);
+}
+
+.item {
+  margin: 4px;
+  font-size: 1.2em;
+  font-weight: bold;
+  font-variant: small-caps;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.item:hover {
+  color: rgba(0, 0, 0, 0.75);
+}
