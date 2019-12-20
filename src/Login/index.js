@@ -3,13 +3,17 @@ import PropTypes from "prop-types";
 import { fetchTokenFromUrl } from "./utils";
 import style from "./Login.module.css";
 
-const LOGIN_URL = process.env.REACT_APP_LOGIN_URL;
+const GOOGLE_LOGIN_URL = process.env.REACT_APP_LOGIN_GOOGLE_URL;
+const SPOTIFY_LOGIN_URL = process.env.REACT_APP_LOGIN_SPOTIFY_URL;
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this._onLoginButtonClick = this._onLoginButtonClick.bind(this);
+    this._onLoginGoogleButtonClick = this._onLoginGoogleButtonClick.bind(this);
+    this._onLoginSpotifyButtonClick = this._onLoginSpotifyButtonClick.bind(
+      this
+    );
   }
 
   componentDidMount() {
@@ -22,8 +26,12 @@ class Login extends React.Component {
     }
   }
 
-  _onLoginButtonClick() {
-    window.open(LOGIN_URL, "_self");
+  _onLoginGoogleButtonClick() {
+    window.open(GOOGLE_LOGIN_URL, "_self");
+  }
+
+  _onLoginSpotifyButtonClick() {
+    window.open(SPOTIFY_LOGIN_URL, "_self");
   }
 
   render() {
@@ -31,10 +39,16 @@ class Login extends React.Component {
       <div className={style.container}>
         <h1>GYJUKEBOX</h1>
         <button
-          onClick={this._onLoginButtonClick}
-          className={style.loginButton}
+          onClick={this._onLoginGoogleButtonClick}
+          className={`${style.loginButton} ${style.googleLoginButton}`}
         >
-          Login
+          Login with Google
+        </button>
+        <button
+          onClick={this._onLoginSpotifyButtonClick}
+          className={`${style.loginButton} ${style.spotifyLoginButton}`}
+        >
+          Login with Spotify
         </button>
       </div>
     );

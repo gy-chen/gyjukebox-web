@@ -9,4 +9,17 @@
 
 .loginButton {
   font-size: 1.2em;
+  color: white;
+  padding: 12px;
+  border: unset;
+  margin: 8px;
+  border-radius: 4px;
+}
+
+.googleLoginButton {
+  background-color: rgb(203, 64, 35);
+}
+
+.spotifyLoginButton {
+  background-color: rgb(30, 205, 96);
 }
