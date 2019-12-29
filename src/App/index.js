@@ -9,6 +9,7 @@ import PlaylistListItem from "../PlaylistListItem";
 import TrackListItem from "../TrackListItem";
 import PollingCurrentTrack from "../PollingCurrentTrack";
 import Player from "../Player";
+import Spinner from "../Spinner";
 import * as jukeboxApi from "../api";
 import { Tab } from "../Tabs";
 import { logout } from "../Login/utils";
@@ -18,6 +19,11 @@ const _PlayerState = {
   WAIT: 1,
   READY: 2,
   PLAY: 3
+};
+
+const _LoadingState = {
+  LOADING: 1,
+  DONE: 2
 };
 
 class App extends React.Component {
@@ -39,12 +45,14 @@ class App extends React.Component {
     currentTrack: null,
     currentSearchListData: this._EMPTY_SEARCH_LIST_DATA,
     playerState: _PlayerState.WAIT,
+    loadingState: _LoadingState.DONE,
     tab: Tab.HOME
   };
 
   constructor(props) {
     super(props);
 
+    this._wrapLoadingAction = this._wrapLoadingAction.bind(this);
     this._onPlayButtonClick = this._onPlayButtonClick.bind(this);
     this._onPlayerReady = this._onPlayerReady.bind(this);
     this._onPopState = this._onPopState.bind(this);
@@ -56,18 +64,34 @@ class App extends React.Component {
     this._onQueuePlaylistButtonClick = this._onQueuePlaylistButtonClick.bind(
       this
     );
-    this._onViewAlbumButtonClick = this._onViewAlbumButtonClick.bind(this);
-    this._onViewArtistButtonClick = this._onViewArtistButtonClick.bind(this);
-    this._onViewPlaylistButtonClick = this._onViewPlaylistButtonClick.bind(
-      this
+    this._onViewAlbumButtonClick = this._wrapLoadingAction(
+      this._onViewAlbumButtonClick.bind(this)
     );
-    this._onSearchButtonClick = this._onSearchButtonClick.bind(this);
+    this._onViewArtistButtonClick = this._wrapLoadingAction(
+      this._onViewArtistButtonClick.bind(this)
+    );
+    this._onViewPlaylistButtonClick = this._wrapLoadingAction(
+      this._onViewPlaylistButtonClick.bind(this)
+    );
+    this._onSearchButtonClick = this._wrapLoadingAction(
+      this._onSearchButtonClick.bind(this)
+    );
     this._refreshTabContent = this._refreshTabContent.bind(this);
-    this._refreshUserTop = this._refreshUserTop.bind(this);
-    this._refreshUserPlaylists = this._refreshUserPlaylists.bind(this);
-    this._refreshUserAlbums = this._refreshUserAlbums.bind(this);
-    this._refreshUserArtists = this._refreshUserArtists.bind(this);
-    this._refreshUserTracks = this._refreshUserTracks.bind(this);
+    this._refreshUserTop = this._wrapLoadingAction(
+      this._refreshUserTop.bind(this)
+    );
+    this._refreshUserPlaylists = this._wrapLoadingAction(
+      this._refreshUserPlaylists.bind(this)
+    );
+    this._refreshUserAlbums = this._wrapLoadingAction(
+      this._refreshUserAlbums.bind(this)
+    );
+    this._refreshUserArtists = this._wrapLoadingAction(
+      this._refreshUserArtists.bind(this)
+    );
+    this._refreshUserTracks = this._wrapLoadingAction(
+      this._refreshUserTracks.bind(this)
+    );
     this._onTabChangeButtonClick = this._onTabChangeButtonClick.bind(this);
     this._onLogoutButtonClick = this._onLogoutButtonClick.bind(this);
     this._logout = this._logout.bind(this);
@@ -84,6 +108,23 @@ class App extends React.Component {
     if (prevTab !== tab) {
       this._refreshTabContent();
     }
+  }
+
+  _wrapLoadingAction(action) {
+    const wrapper = async (...args) => {
+      this.setState({
+        loadingState: _LoadingState.LOADING
+      });
+      try {
+        await action(...args);
+      } finally {
+        this.setState({
+          loadingState: _LoadingState.DONE
+        });
+      }
+    };
+
+    return wrapper;
   }
 
   _onPlayButtonClick() {
@@ -392,7 +433,8 @@ class App extends React.Component {
       inQueuePlaylists,
       currentTrack,
       currentSearchListData,
-      playerState
+      playerState,
+      loadingState
     } = this.state;
 
     return (
@@ -406,22 +448,26 @@ class App extends React.Component {
           />
         </div>
         <div className={style.searchListContainer}>
-          <SearchList
-            {...currentSearchListData}
-            inQueueTracks={inQueueTracks}
-            inQueueAlbums={inQueueAlbums}
-            inQueuePlaylists={inQueuePlaylists}
-            albumComponent={AlbumListItem}
-            artistComponent={ArtistLiteItem}
-            playlistComponent={PlaylistListItem}
-            trackComponent={TrackListItem}
-            onQueueTrackButtonClick={this._onQueueTrackButtonClick}
-            onQueueAlbumButtonClick={this._onQueueAlbumButtonClick}
-            onQueuePlaylistButtonClick={this._onQueuePlaylistButtonClick}
-            onViewAlbumButtonClick={this._onViewAlbumButtonClick}
-            onViewArtistButtonClick={this._onViewArtistButtonClick}
-            onViewPlaylistButtonClick={this._onViewPlaylistButtonClick}
-          />
+          {loadingState === _LoadingState.LOADING ? (
+            <Spinner />
+          ) : (
+            <SearchList
+              {...currentSearchListData}
+              inQueueTracks={inQueueTracks}
+              inQueueAlbums={inQueueAlbums}
+              inQueuePlaylists={inQueuePlaylists}
+              albumComponent={AlbumListItem}
+              artistComponent={ArtistLiteItem}
+              playlistComponent={PlaylistListItem}
+              trackComponent={TrackListItem}
+              onQueueTrackButtonClick={this._onQueueTrackButtonClick}
+              onQueueAlbumButtonClick={this._onQueueAlbumButtonClick}
+              onQueuePlaylistButtonClick={this._onQueuePlaylistButtonClick}
+              onViewAlbumButtonClick={this._onViewAlbumButtonClick}
+              onViewArtistButtonClick={this._onViewArtistButtonClick}
+              onViewPlaylistButtonClick={this._onViewPlaylistButtonClick}
+            />
+          )}
         </div>
         <div className={style.footerBarContainer}>
           <FooterBar
