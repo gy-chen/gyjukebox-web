@@ -50,6 +50,14 @@ const Tabs = props => {
       >
         MY TRACKS
       </div>
+      {activeTab === Tab.SEARCH ? (
+        <div
+          className={_getItemClassName(Tab.SEARCH)}
+          onClick={() => _onTabChangeButtonClick(Tab.SEARCH)}
+        >
+          SERACH
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -64,7 +72,8 @@ export const Tab = {
   MY_PLAYLISTS: 2,
   MY_ALBUMS: 3,
   MY_ARTISTS: 4,
-  MY_TRACKS: 5
+  MY_TRACKS: 5,
+  SEARCH: 6
 };
 
 export default Tabs;

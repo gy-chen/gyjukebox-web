@@ -232,6 +232,7 @@ class App extends React.Component {
       const { albums, artists, tracks, playlists } = await jukeboxApi.search(q);
       this.setState(
         {
+          tab: Tab.SEARCH,
           currentSearchListData: {
             ...this._EMPTY_SEARCH_LIST_DATA,
             albums,

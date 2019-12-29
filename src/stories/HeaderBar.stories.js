@@ -16,18 +16,20 @@ export const basic = () => (
 
 export const homeTabActivaed = () => <HeaderBar activeTab={Tab.HOME} />;
 
-export const myPlaylistsTabActivaed = () => (
+export const myPlaylistsTabActivated = () => (
   <HeaderBar activeTab={Tab.MY_PLAYLISTS} />
 );
 
-export const myAlbumsTabActivaed = () => (
+export const myAlbumsTabActivated = () => (
   <HeaderBar activeTab={Tab.MY_ALBUMS} />
 );
 
-export const myArtistsTabActivaed = () => (
+export const myArtistsTabActivated = () => (
   <HeaderBar activeTab={Tab.MY_ARTISTS} />
 );
 
-export const myTracksTabActivaed = () => (
+export const myTracksTabActivated = () => (
   <HeaderBar activeTab={Tab.MY_TRACKS} />
 );
+
+export const searchActivated = () => <HeaderBar activeTab={Tab.SEARCH} />;
