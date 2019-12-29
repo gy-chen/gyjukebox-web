@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  50% {
+    border-radius: 0;
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  background-color: black;
+  border-radius: 50%;
+  animation: spin 4s linear infinite;
+  width: 28px;
+  height: 28px;
+}
